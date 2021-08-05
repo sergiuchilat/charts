@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
     drawChart("pie-group-services");
     drawChart("bar-group-statuses");
+    drawChart("bar-online-vs-offline");    
     drawChart("bar-group-months");
     drawChart("created-last-month");
 });
@@ -19,20 +20,41 @@ const fillLastYear = () => {
     return data;
 }
 
+
+const getDaysBetweenDates = (startDate, endDate) => {
+  let now = startDate.clone(), dates = [];
+  while (now.isSameOrBefore(endDate)) {
+    dates.push(now.format('DD.MM.YYYY'));
+    now.add(1, 'days');
+  }
+  return dates;
+}
+
+
+const generateLast30DaysData = () => {
+  const data = [];
+    for (let index = 1; index <= 30; index++) {
+        data.push(Math.round(Math.random() * 10) *  index * 100);
+        
+    }
+    return data;
+}
+
 const chartConfig = {
     "pie-group-services": {
         type: 'pie',
+        responsive: true,
         data: {
             labels: ['ATA', 'Certificate', 'Expertiza', 'Evaluare', 'AAIJ'],
             datasets: [{
                 label: '# of Votes',
                 data: [12, 19, 3, 5, 2],
                 backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)'
+                    'orange',
+                    'blue',
+                    'violet',
+                    'green',
+                    'gray'
                 ],
                 borderColor: [
                     'rgba(255, 99, 132, 1)',
@@ -93,6 +115,34 @@ const chartConfig = {
             }
         },
     },
+    "bar-online-vs-offline": {
+      type: 'bar',
+      data: {
+          labels: ['ATA', 'Certificate', 'Expertiza', 'Evaluare', 'AAIJ'],
+          datasets: [
+            {
+              label: 'Online',
+              data: [100, 50, 10, 15, 20],
+              borderColor: "orange",
+              backgroundColor: "orange",
+            },
+            {
+              label: 'Offline',
+              data: [30, 10, 10, 5, 11],
+              borderColor: "red",
+              backgroundColor: "blue",
+            }
+          ]
+      },
+      options: {
+          responsive: true,
+          plugins: {
+              legend: {
+                  position: 'top',
+              }
+          }
+      },
+  },
     "bar-group-months": {
         type: 'bar',
         data: {
@@ -100,33 +150,33 @@ const chartConfig = {
             datasets: [
               {
                 label: 'ATA',
-                data: [fillLastYear()],
+                data: fillLastYear(),
                 borderColor: "orange",
                 backgroundColor: "orange",
               },
               {
                 label: 'Certificate',
-                data: [fillLastYear()],
+                data: fillLastYear(),
                 borderColor: "red",
                 backgroundColor: "blue",
               },
               {
                 label: 'Expertiza',
-                data: [fillLastYear()],
+                data: fillLastYear(),
                 borderColor: "violet",
                 backgroundColor: "violet",
               },
               {
                 label: 'Evaluare',
-                data: [fillLastYear()],
+                data: fillLastYear(),
                 borderColor: "green",
                 backgroundColor: "green",
               },
               {
                 label: 'AAIJ',
-                data: [fillLastYear()],
-                borderColor: "green",
-                backgroundColor: "green",
+                data: fillLastYear(),
+                borderColor: "gray",
+                backgroundColor: "gray",
               }
             ]
         },
@@ -142,29 +192,29 @@ const chartConfig = {
     "created-last-month": {
         type: 'line',
         data: {
-            labels: [],
+            labels: getDaysBetweenDates(moment().subtract(30, 'days'), moment()),
             datasets: [
               {
                 label: 'Așteptare',
-                data: [],
+                data: generateLast30DaysData(),
                 borderColor: "orange",
                 backgroundColor: "orange",
               },
               {
                 label: 'Confirmate',
-                data: [],
+                data: generateLast30DaysData(),
                 borderColor: "red",
                 backgroundColor: "blue",
               },
               {
                 label: 'Achitate',
-                data: [],
+                data: generateLast30DaysData(),
                 borderColor: "violet",
                 backgroundColor: "violet",
               },
               {
                 label: 'Finisate',
-                data: [],
+                data: generateLast30DaysData(),
                 borderColor: "green",
                 backgroundColor: "green",
               }
